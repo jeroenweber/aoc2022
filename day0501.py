@@ -1,6 +1,6 @@
 from readfromfile import readfromfile
 
-data = readfromfile('C:/Users/jeroen.weber/PycharmProjects/aoc2022g/day0501test.txt')
+data = readfromfile('C:/Users/jeroen.weber/PycharmProjects/aoc2022g/day0501.txt')
 numberofcolumns = 0
 datamap = list()
 
@@ -29,26 +29,50 @@ def createmap(data):
         line = data[index]
     numberofcolumns = count[-1]
     data.pop(0)
-    index = len(columns)-1
-    #col = columns.pop(index)
-    #print(col)
-    # for line in columns:
-    #     if
-    return columns
+    newmap = list()
+    numberofcolumns = int(numberofcolumns)
+    for row in columns:
+        length = len(row)
+        if (length < numberofcolumns):
+            for i in range(length, numberofcolumns):
+                row.append(' ')
+        newmap.append(row)
+    finalmap = list()
+    for i in range(len(newmap)):
+        columns = list()
+        for item in newmap[::-1]:
+            if (item[i] != ' '):
+                columns.append(item[i])
+        finalmap.append(columns)
+    return finalmap
 
 
 datamap = createmap(data)
-newmap = list()
-numberofcolumns = int(numberofcolumns)
-for row in datamap:
-    length = len(row)
-    if (length < numberofcolumns):
-        for i in range(length,numberofcolumns):
-            row.append(' ')
-    newmap.append(row)
-
-print(newmap)
+datamap.append(['D', 'S', 'C', 'N', 'L', 'P', 'H'])
+print(datamap)
 print(data)
+
+for command in data:
+    actions = command.split(' ')
+    count = int(actions[1])
+    columnfrom = int(actions[3])-1
+    columnto = int(actions[5])-1
+    print(f"moving {count} from column {columnfrom} to column {columnto}" )
+    length = len(datamap)
+    for move in range(count):
+        cfrom = datamap[columnfrom]
+        cto = datamap[columnto]
+        if (len(cfrom) > 0):
+            cto.append(cfrom[-1])
+            cfrom.pop(-1)
+        datamap[columnfrom] = cfrom
+        datamap[columnto] = cto
+    message = list()
+    for column in datamap:
+        if (len(column) > 0):
+            message.append(column[-1])
+
+print("".join(message))
 
 
 
